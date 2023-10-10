@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../static/css/upload.css" />
+    <title>Upload</title>
+  </head>
+  <body>
+    <h1>Upload Excel Sheet</h1>
+    <form>
+      <input type="file" name="file" />
+      <button>Submit</button>
+    </form>
+    <script>
+      const form = document.querySelector("form")
+      const fileInput = document.querySelector("input[type='file']")
+      form.addEventListener("submit", (e) => {
+        e.preventDefault()
+        const formData = new FormData()
+        formData.append("file", fileInput.files[0])
+
+        console.log(formData.get("file"))
+
+        fetch("/upload", {
+          method: "POST",
+          body: formData,
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            console.log("data: " + JSON.stringify(data))
+            clearFileInput(fileInput)
+          })
+          .catch((err) => console.log("error: " + err))
+      })
+      function clearFileInput(fileInput) {
+        fileInput.value = ""
+
+        fileInput.type = "text"
+        fileInput.type = "file"
+      }
+    </script>
+  </body>
+</html>
